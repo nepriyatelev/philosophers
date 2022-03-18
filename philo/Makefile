@@ -6,7 +6,7 @@
 #    By: modysseu <modysseu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/16 15:37:42 by modysseu          #+#    #+#              #
-#    Updated: 2022/03/16 19:37:18 by modysseu         ###   ########.fr        #
+#    Updated: 2022/03/18 17:51:27 by modysseu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,7 @@ NAME	=	philo
 
 SRC		=	ft_atoi.c\
 			ft_isdigit.c\
+			parser.c\
 			main.c
 
 HEADER	=	philosophers.h
@@ -21,7 +22,8 @@ HEADER	=	philosophers.h
 CC		=	cc
 
 FLAGS	=	-Werror -Wall -Wextra -g -I $(HEADER) -pthread
-
+#-xinstrument=datarace
+#leaks --atExit -- 
 RM		=	rm -f
 
 OBJ		= $(SRC:.c=.o)
