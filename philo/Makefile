@@ -6,7 +6,7 @@
 #    By: modysseu <modysseu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/16 15:37:42 by modysseu          #+#    #+#              #
-#    Updated: 2022/03/18 17:51:27 by modysseu         ###   ########.fr        #
+#    Updated: 2022/03/20 16:29:27 by modysseu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,9 @@ NAME	=	philo
 
 SRC		=	ft_atoi.c\
 			ft_isdigit.c\
+			ft_lstadd_back.c\
+			ft_lstlast.c\
+			ft_lstnew.c\
 			parser.c\
 			main.c
 
@@ -23,7 +26,8 @@ CC		=	cc
 
 FLAGS	=	-Werror -Wall -Wextra -g -I $(HEADER) -pthread
 #-xinstrument=datarace
-#leaks --atExit -- 
+#leaks --atExit --
+#-fsanitize=address
 RM		=	rm -f
 
 OBJ		= $(SRC:.c=.o)
@@ -33,8 +37,8 @@ all		:	$(NAME)
 $(NAME) : $(OBJ) $(HEADER)
 	$(CC) $(FLAGS) $(OBJ) -o $(NAME)
 
-# %.o: %.c $(HEADER) Makefile
-# 	$(CC) $(FLAGS) -c $< -o $@
+%.o: %.c $(HEADER) Makefile
+	$(CC) $(FLAGS) -c $< -o $@
 
 clean :
 	$(RM) $(OBJ)

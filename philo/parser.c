@@ -6,7 +6,7 @@
 /*   By: modysseu <modysseu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 19:48:39 by modysseu          #+#    #+#             */
-/*   Updated: 2022/03/18 17:27:19 by modysseu         ###   ########.fr       */
+/*   Updated: 2022/03/22 12:08:30 by modysseu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,43 @@ static int	validation_check(char **input)
 	return (0);
 }
 
-int	parser(t_arg *param, char **input)
+int	init_lst(t_philosopher **thread, t_args **args)
 {
+	int				i;
+	t_philosopher	*tmp;
+
+	tmp = NULL;
+	i = 0;
+	while (i < (*args)->nop)
+	{
+		tmp = ft_lstnew(args, i + 1);
+		if (tmp == NULL)
+			return (1);
+		ft_lstadd_back(thread, tmp);
+		i++;
+	}
+	ft_lstlast(*thread)->next = *thread;
+	return (0);
+}
+
+int	parser(t_philosopher **thread, char **input)
+{
+	t_args	*args;
+
+	args = (t_args *)malloc(sizeof(t_args));
+	memset(args, 0, sizeof(t_args));
 	if (validation_check(input))
 		return (1);
-	param->number_of_philosophers = ft_atoi(input[0]);
-	param->time_to_die = ft_atoi(input[1]);
-	param->time_to_eat = ft_atoi(input[2]);
-	param->time_to_sleep = ft_atoi(input[3]);
+	args->nop = ft_atoi(input[0]);
+	args->ttd = ft_atoi(input[1]);
+	args->tte = ft_atoi(input[2]);
+	args->tts = ft_atoi(input[3]);
+	args->lock = 1;
 	if (input[4])
-		param->number_of_times_each_philosopher_must_eat = ft_atoi(input[4]);
+		args->notepme = ft_atoi(input[4]);
 	else
-		param->number_of_times_each_philosopher_must_eat = 0;
+		args->notepme = 0;
+	if (init_lst(thread, &args))
+		return (1);
 	return (0);
 }

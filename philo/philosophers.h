@@ -6,7 +6,7 @@
 /*   By: modysseu <modysseu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 15:19:45 by modysseu          #+#    #+#             */
-/*   Updated: 2022/03/18 21:00:20 by modysseu         ###   ########.fr       */
+/*   Updated: 2022/03/22 12:07:53 by modysseu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,27 +20,37 @@
 # include <sys/time.h>
 # include <stdio.h>
 
-typedef struct s_arg
+typedef struct s_args
 {
-	int		number_of_philosophers;
-	int		time_to_die;
-	int		time_to_eat;
-	int		time_to_sleep;
-	int		number_of_times_each_philosopher_must_eat;
-}	t_arg;
+	int					nop;/*number_of_philosophers*/
+	int					ttd;/*time_to_die*/
+	int					tte;/*time_to_eat*/
+	int					tts;/*time_to_sleep*/
+	int					notepme;/*number_of_times_each_philosopher_must_eat*/
+	int					lock;
+	pthread_mutex_t		print;
+	unsigned long long	start_time;
+	unsigned long long	time_in_process;
+}	t_args;
 
 typedef struct s_philosopher
 {
-	pthread_t		thread;
-	pthread_mutex_t	fork;
-	int				thread_id;
-	t_arg			*input;
+	pthread_t				thread;
+	pthread_mutex_t			fork;
+	t_args					*args;
+	int						thread_id;
+	int						is_dead;
+	int						ttd;/*time_to_die*/
+	struct s_philosopher	*next;
 }	t_philosopher;
 
 int	ft_atoi(const char *str);
 int	ft_isdigit(int c);
+void	ft_lstadd_back(t_philosopher **lst, t_philosopher *new);
+t_philosopher	*ft_lstlast(t_philosopher *lst);
+t_philosopher	*ft_lstnew(t_args **args, int id);
 
-int	parser(t_arg *param, char **argv);
+int	parser(t_philosopher **thread, char **input);
 
 
 #endif
