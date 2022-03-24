@@ -6,28 +6,27 @@
 /*   By: modysseu <modysseu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 15:19:48 by modysseu          #+#    #+#             */
-/*   Updated: 2022/03/22 19:22:27 by modysseu         ###   ########.fr       */
+/*   Updated: 2022/03/24 21:17:02 by modysseu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
 /*time*/
-long long unsigned ft_time(t_philosopher *thread)
+long long unsigned ft_time(void)
 {
 	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
-	thread->args->time_in_process = (((tv.tv_usec) / 1000) + (tv.tv_sec * 1000));
-	return(thread->args->time_in_process);
+	return(tv.tv_usec / 1000 + tv.tv_sec * 1000);
 }
 
 void ft_sleep(t_philosopher *thread, int time)
 {
-	long long unsigned c = ft_time(thread) - thread->args->start_time + time;
-	while((ft_time(thread) - thread->args->start_time) <= c)
+	(void)thread;
+	long long unsigned c = ft_time() + time;
+	while(ft_time() < c)
 		;
-	thread->args->start_time += 1;
 }
 /*end time*/
 void *execution(void *incoming_thread)
@@ -35,27 +34,42 @@ void *execution(void *incoming_thread)
 	t_philosopher	*thread;
 
 	thread = (t_philosopher *)incoming_thread;
-		thread->args->start_time = ft_time(thread);
-	while (1)
+	// if (thread->thread_id % 2 == 0)
+		// usleep(thread->args->tte * 1000);
+	while (thread->count_eat && 1)
 	{
 		pthread_mutex_lock(&thread->fork);
+
 		pthread_mutex_lock(&thread->args->print);
-		printf("%llu ms : philosopher %d has taken a fork %d\n", ft_time(thread) - thread->args->start_time, thread->thread_id, thread->thread_id);
+		printf("%llu ms : philosopher %d has taken a fork %d\n", ft_time() - thread->args->start_time, thread->thread_id, thread->thread_id);
 		pthread_mutex_unlock(&thread->args->print);
-		pthread_mutex_unlock(&thread->fork);
-		pthread_mutex_lock(&thread->fork);
+		
+		pthread_mutex_lock(&thread->next->fork);
+
 		pthread_mutex_lock(&thread->args->print);
-		printf("%llu ms : philosopher %d has taken a fork %d\n", ft_time(thread) - thread->args->start_time, thread->thread_id, thread->next->thread_id);
+		printf("%llu ms : philosopher %d has taken a fork %d\n", ft_time() - thread->args->start_time, thread->thread_id, thread->next->thread_id);
 		pthread_mutex_unlock(&thread->args->print);
-		pthread_mutex_unlock(&thread->fork);
+		
 		pthread_mutex_lock(&thread->args->print);
-		printf("%llu ms : philosopher %d is eating\n", ft_time(thread) - thread->args->start_time, thread->thread_id);
+		printf("%llu ms : philosopher %d is eating\n", ft_time() - thread->args->start_time, thread->thread_id);
+		if (thread->count_eat > 0)
+			thread->count_eat--;
+		pthread_mutex_unlock(&thread->args->print);
 		ft_sleep(thread, thread->args->tte);
-		pthread_mutex_unlock(&thread->args->print);
+		
+		pthread_mutex_unlock(&thread->fork);
+
+		pthread_mutex_unlock(&thread->next->fork);
+
 		pthread_mutex_lock(&thread->args->print);
-		printf("%llu ms : philosopher %d is sleeping\n", ft_time(thread) - thread->args->start_time, thread->thread_id);
-		ft_sleep(thread, thread->args->tts);
+		printf("%llu ms : philosopher %d is sleeping\n", ft_time() - thread->args->start_time, thread->thread_id);
+		ft_sleep(thread, thread->args->tts); //возмозможно на 67, а возмоэно тут
 		pthread_mutex_unlock(&thread->args->print);
+
+		pthread_mutex_lock(&thread->args->print);
+		printf("%llu ms : philosopher %d is thinking\n", ft_time() - thread->args->start_time, thread->thread_id);
+		pthread_mutex_unlock(&thread->args->print);
+		
 	}
 	return (NULL);
 }
@@ -65,6 +79,7 @@ int	create_thread(t_philosopher	*thread)
 	int				i;
 
 	i = 0;
+	thread->args->start_time = ft_time();
 	pthread_mutex_init(&thread->args->print, NULL); //create mut
 	while (i < thread->args->nop)
 	{
@@ -78,25 +93,28 @@ int	create_thread(t_philosopher	*thread)
 	{
 		if (pthread_create(&thread->thread, NULL, execution, (void *)thread))
 			return (1);
-		thread = thread->next;
-		i += 2;
-	}
-	usleep(100);
-	i = 1;
-	while (i < thread->args->nop)
-	{
-		if (pthread_create(&thread->thread, NULL, execution, (void *)thread))
-			return (1);
-		thread = thread->next;
-		i += 2;
-	}
-	i = 0;
-	while (i < thread->args->nop) //join threads
-	{
-		if (pthread_join(thread->thread, NULL))
-			return (1);
+			usleep(100);
 		thread = thread->next;
 		i++;
+	}
+	if (thread->args->notepme > 0)
+	{
+		i = 0;
+		while (i < thread->args->nop) //join threads
+		{
+			if (pthread_join(thread->thread, NULL))
+				return (1);
+			thread = thread->next;
+			i++;
+		}
+	}
+	else
+	{
+		usleep(1000);
+		while (1)
+		{
+			
+		}
 	}
 	i = 0;
 	while (i < thread->args->nop) //destroy mut
@@ -124,12 +142,3 @@ int	main(int argc, char **argv)
 	create_thread(thread);
 	return (EXIT_SUCCESS);
 }
-
-	// int i = 0;
-	// while (i < thread->args->nop)
-	// {
-	// 	printf("id = %d\tnotemp = %d\t nop = %d\tis dead = %d\ttime = %lld\n", thread->thread_id, thread->args->notepme, thread->args->nop, thread->is_dead, thread->args->start_time);
-	// 	thread = thread->next;
-	// 	i++;
-	// }
-	// printf("id = %d\tnotemp = %d\t nop = %d\tis dead = %d\ttime = %lld\n", thread->thread_id, thread->args->notepme, thread->args->nop, thread->is_dead, thread->args->start_time);

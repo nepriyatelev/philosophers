@@ -6,7 +6,7 @@
 /*   By: modysseu <modysseu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 15:19:45 by modysseu          #+#    #+#             */
-/*   Updated: 2022/03/22 12:07:53 by modysseu         ###   ########.fr       */
+/*   Updated: 2022/03/24 19:45:34 by modysseu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,14 @@
 
 typedef struct s_args
 {
-	int					nop;/*number_of_philosophers*/
-	int					ttd;/*time_to_die*/
-	int					tte;/*time_to_eat*/
-	int					tts;/*time_to_sleep*/
-	int					notepme;/*number_of_times_each_philosopher_must_eat*/
-	int					lock;
+	int					nop;		/*number_of_philosophers*/
+	int					ttd;		/*time_to_die*/
+	int					tte;		/*time_to_eat*/
+	int					tts;		/*time_to_sleep*/
+	int					notepme;	/*number_of_times_each_philosopher_must_eat*/
 	pthread_mutex_t		print;
 	unsigned long long	start_time;
-	unsigned long long	time_in_process;
+	// unsigned long long	time_in_process;
 }	t_args;
 
 typedef struct s_philosopher
@@ -39,8 +38,8 @@ typedef struct s_philosopher
 	pthread_mutex_t			fork;
 	t_args					*args;
 	int						thread_id;
+	int						count_eat;
 	int						is_dead;
-	int						ttd;/*time_to_die*/
 	struct s_philosopher	*next;
 }	t_philosopher;
 
