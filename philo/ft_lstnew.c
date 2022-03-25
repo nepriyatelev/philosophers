@@ -6,7 +6,7 @@
 /*   By: modysseu <modysseu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/15 16:23:19 by modysseu          #+#    #+#             */
-/*   Updated: 2022/03/24 19:45:57 by modysseu         ###   ########.fr       */
+/*   Updated: 2022/03/25 19:31:43 by modysseu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ t_philosopher	*ft_lstnew(t_args **args, int id)
 	new_lst->args = *args;
 	new_lst->thread_id = id;
 	new_lst->count_eat = (*args)->notepme;
-	new_lst->is_dead = 0;
+	new_lst->last_eat = 0;
+	new_lst->full = -1;
 	new_lst->next = NULL;
 	return (new_lst);
 }

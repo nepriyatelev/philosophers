@@ -6,7 +6,7 @@
 /*   By: modysseu <modysseu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 19:48:39 by modysseu          #+#    #+#             */
-/*   Updated: 2022/03/24 19:52:42 by modysseu         ###   ########.fr       */
+/*   Updated: 2022/03/25 17:17:09 by modysseu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ static int	validation_check(char **input)
 	}
 	return (0);
 }
+
 
 int	init_lst(t_philosopher **thread, t_args **args)
 {

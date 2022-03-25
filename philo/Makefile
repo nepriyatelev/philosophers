@@ -6,7 +6,7 @@
 #    By: modysseu <modysseu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/16 15:37:42 by modysseu          #+#    #+#              #
-#    Updated: 2022/03/23 17:27:52 by modysseu         ###   ########.fr        #
+#    Updated: 2022/03/25 18:27:40 by modysseu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ HEADER	=	philosophers.h
 
 CC		=	cc
 
-FLAGS	=	-Werror -Wall -Wextra -g -I $(HEADER) -pthread
+FLAGS	=	-Werror -Wall -Wextra -fsanitize=thread -g -I $(HEADER) 
 #-xinstrument=datarace
 #leaks --atExit --
 #-fsanitize=address
