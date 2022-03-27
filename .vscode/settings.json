@@ -1,0 +1,8 @@
+{
+	"files.associations": {
+		"pthread.h": "c",
+		"philosophers.h": "c",
+		"time.h": "c",
+		"_timeval.h": "c"
+	}
+}
