@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew.c                                        :+:      :+:    :+:   */
+/*   list_func.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: modysseu <modysseu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/15 16:23:19 by modysseu          #+#    #+#             */
-/*   Updated: 2022/03/25 19:31:43 by modysseu         ###   ########.fr       */
+/*   Created: 2022/03/27 15:41:26 by modysseu          #+#    #+#             */
+/*   Updated: 2022/03/27 21:02:09 by modysseu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,52 @@ t_philosopher	*ft_lstnew(t_args **args, int id)
 	new_lst->thread = NULL;
 	new_lst->args = *args;
 	new_lst->thread_id = id;
-	new_lst->count_eat = (*args)->notepme;
+	new_lst->eating = (*args)->notepme;
 	new_lst->last_eat = 0;
-	new_lst->full = -1;
+	new_lst->death = 0;
 	new_lst->next = NULL;
 	return (new_lst);
+}
+
+t_philosopher	*ft_lstlast(t_philosopher *lst)
+{
+	if (lst)
+		while (lst->next)
+			lst = lst->next;
+	return (lst);
+}
+
+void	ft_lstadd_back(t_philosopher **lst, t_philosopher *new)
+{
+	t_philosopher	*node;
+
+	if (new != NULL)
+	{
+		if (*lst == NULL)
+			*lst = new;
+		else
+		{
+			node = *lst;
+			while (node->next != NULL)
+				node = node->next;
+		node->next = new;
+		}
+	}
+}
+
+void	ft_lstclear(t_philosopher **lst, void (*del)(void*))
+{
+	t_philosopher	*node;
+
+	if (*lst != NULL && del != NULL)
+	{
+		node = (*lst)->next;
+		while (node)
+		{
+			free(*lst);
+			(*lst) = node;
+			node = node->next;
+		}
+		*lst = NULL;
+	}
 }

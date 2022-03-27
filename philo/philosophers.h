@@ -6,7 +6,7 @@
 /*   By: modysseu <modysseu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 15:19:45 by modysseu          #+#    #+#             */
-/*   Updated: 2022/03/25 19:41:45 by modysseu         ###   ########.fr       */
+/*   Updated: 2022/03/27 21:00:27 by modysseu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,17 @@
 # include <sys/time.h>
 # include <stdio.h>
 
+# define ERROR_ALLOCATION		-1
+# define ERROR_INPUT			-2
+# define ERROR_GETTIMEOFDAY		-3
+# define ERROR_MUTEX_INIT		-4
+# define ERROR_THREAD_CREATE	-5
+# define ERROR_THREAD_DETACH	-6
+# define ERROR_MUTEX_DESTROY	-7
+# define ERROR_THREAD_JOIN		-8
+# define ERROR_MUTEX_LOCK		-9
+# define ERROR_MUTEX_UNLOCK		-10
+
 typedef struct s_args
 {
 	int					nop;		/*number_of_philosophers*/
@@ -28,9 +39,8 @@ typedef struct s_args
 	int					tts;		/*time_to_sleep*/
 	int					notepme;	/*number_of_times_each_philosopher_must_eat*/
 	pthread_mutex_t		print;
-	unsigned long long	start_time;
-	unsigned long long	process_time;
-	// unsigned long long	time_in_process;
+	pthread_mutex_t		data;
+	long long			start_time;
 }	t_args;
 
 typedef struct s_philosopher
@@ -39,20 +49,24 @@ typedef struct s_philosopher
 	pthread_mutex_t			fork;
 	t_args					*args;
 	int						thread_id;
-	int						count_eat;
-	int						full;
-	long long unsigned		last_eat;
-	long long unsigned		ttd;
+	int						death;
+	int						eating;
+	long long				last_eat;
 	struct s_philosopher	*next;
 }	t_philosopher;
 
-int	ft_atoi(const char *str);
-int	ft_isdigit(int c);
-void	ft_lstadd_back(t_philosopher **lst, t_philosopher *new);
+int				ft_atoi(const char *str);
+int				ft_isdigit(int c);
+long long		ft_gettime(void);
+int				ft_sleep(int time);
+
+void			ft_lstadd_back(t_philosopher **lst, t_philosopher *new);
 t_philosopher	*ft_lstlast(t_philosopher *lst);
 t_philosopher	*ft_lstnew(t_args **args, int id);
+void			ft_lstclear(t_philosopher **lst, void (*del)(void*));
 
-int	parser(t_philosopher **thread, char **input);
+int				parser(t_args *args, char **input);
+int				init_lst(t_philosopher **thread, t_args **args);
 
 
 #endif
