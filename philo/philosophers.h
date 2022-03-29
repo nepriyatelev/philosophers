@@ -6,7 +6,7 @@
 /*   By: modysseu <modysseu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 15:19:45 by modysseu          #+#    #+#             */
-/*   Updated: 2022/03/27 21:00:27 by modysseu         ###   ########.fr       */
+/*   Updated: 2022/03/29 19:13:57 by modysseu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,6 @@
 # include <string.h>
 # include <sys/time.h>
 # include <stdio.h>
-
-# define ERROR_ALLOCATION		-1
-# define ERROR_INPUT			-2
-# define ERROR_GETTIMEOFDAY		-3
-# define ERROR_MUTEX_INIT		-4
-# define ERROR_THREAD_CREATE	-5
-# define ERROR_THREAD_DETACH	-6
-# define ERROR_MUTEX_DESTROY	-7
-# define ERROR_THREAD_JOIN		-8
-# define ERROR_MUTEX_LOCK		-9
-# define ERROR_MUTEX_UNLOCK		-10
 
 typedef struct s_args
 {
@@ -58,7 +47,8 @@ typedef struct s_philosopher
 int				ft_atoi(const char *str);
 int				ft_isdigit(int c);
 long long		ft_gettime(void);
-int				ft_sleep(int time);
+void			ft_sleep(int time);
+int				free_error(t_philosopher *thread, t_args *args);
 
 void			ft_lstadd_back(t_philosopher **lst, t_philosopher *new);
 t_philosopher	*ft_lstlast(t_philosopher *lst);
@@ -68,5 +58,17 @@ void			ft_lstclear(t_philosopher **lst, void (*del)(void*));
 int				parser(t_args *args, char **input);
 int				init_lst(t_philosopher **thread, t_args **args);
 
+int				mutex_destroy(t_philosopher	*thread);
+int				thread_detatch(t_philosopher	*thread);
+int				create_thread(t_philosopher	*thread);
+int				create_mutex(t_philosopher	*thread);
+int				thread_join(t_philosopher	*thread);
+void			*execution(void *incoming_thread);
+void			take_your_fork(t_philosopher *thread, long long time_to_print);
+void			starts_eating(t_philosopher *thread, long long time_to_print);
+void			starts_to_sleep(t_philosopher *thread, long long time_to_print);
+void			begins_to_think(t_philosopher *thread, long long time_to_print);
+void			checking_the_status(t_philosopher *thread,
+						long long check_time);
 
 #endif

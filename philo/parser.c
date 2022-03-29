@@ -6,7 +6,7 @@
 /*   By: modysseu <modysseu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 19:48:39 by modysseu          #+#    #+#             */
-/*   Updated: 2022/03/27 21:00:32 by modysseu         ###   ########.fr       */
+/*   Updated: 2022/03/28 18:12:55 by modysseu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,13 @@ static int	validation_check(char **input)
 	{
 		j = 0;
 		if (ft_atoi(input[i]) == 0)
-			return (ERROR_INPUT);
+			return (1);
 		while (input[i][j])
 		{
 			if (ft_isdigit(input[i][j]))
 				j++;
 			else
-				return (ERROR_INPUT);
+				return (1);
 		}
 		i++;
 	}
@@ -38,7 +38,7 @@ static int	validation_check(char **input)
 int	parser(t_args *args, char **input)
 {
 	if (validation_check(input))
-		return (ERROR_INPUT);
+		return (1);
 	args->nop = ft_atoi(input[0]);
 	args->ttd = ft_atoi(input[1]);
 	args->tte = ft_atoi(input[2]);
@@ -46,7 +46,7 @@ int	parser(t_args *args, char **input)
 	if (input[4])
 		args->notepme = ft_atoi(input[4]);
 	else
-		args->notepme = 0;
+		args->notepme = -1;
 	args->start_time = 0;
 	return (0);
 }

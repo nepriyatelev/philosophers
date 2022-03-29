@@ -6,7 +6,7 @@
 /*   By: modysseu <modysseu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 15:42:57 by modysseu          #+#    #+#             */
-/*   Updated: 2022/03/27 20:56:46 by modysseu         ###   ########.fr       */
+/*   Updated: 2022/03/29 17:23:10 by modysseu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,28 +52,21 @@ long long	ft_gettime(void)
 	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
-	return(tv.tv_usec / 1000 + tv.tv_sec * 1000);
+	return (tv.tv_usec / 1000 + tv.tv_sec * 1000);
 }
 
-int	ft_sleep(int time)
+void	ft_sleep(int time)
 {
 	long long	pause;
-	long long	now;
 
-	now = 0;
-	pause = ft_gettime();
-	if (pause < 0)
-		return (ERROR_GETTIMEOFDAY);
-	pause += time;
-	now = ft_gettime();
-	if (now < 0)
-		return (ERROR_GETTIMEOFDAY);
-	while(now < pause)
-	{
-		now = ft_gettime();
-		if (now < 0)
-			return (ERROR_GETTIMEOFDAY);
+	pause = ft_gettime() + time;
+	while (ft_gettime() < pause)
 		usleep(100);
-	}
-	return (0);
+}
+
+int	free_error(t_philosopher *thread, t_args *args)
+{
+	ft_lstclear(&thread, free);
+	free(args);
+	return (1);
 }

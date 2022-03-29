@@ -6,7 +6,7 @@
 /*   By: modysseu <modysseu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 15:41:26 by modysseu          #+#    #+#             */
-/*   Updated: 2022/03/27 21:02:09 by modysseu         ###   ########.fr       */
+/*   Updated: 2022/03/29 17:01:24 by modysseu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,17 +55,24 @@ void	ft_lstadd_back(t_philosopher **lst, t_philosopher *new)
 	}
 }
 
+void	ft_lstdelone(t_philosopher *lst, void (*del)(void*))
+{
+	if (lst != NULL && *del != NULL)
+	{
+		free(lst);
+	}
+}
+
 void	ft_lstclear(t_philosopher **lst, void (*del)(void*))
 {
 	t_philosopher	*node;
 
 	if (*lst != NULL && del != NULL)
 	{
-		node = (*lst)->next;
-		while (node)
+		node = *lst;
+		while (node != *lst)
 		{
-			free(*lst);
-			(*lst) = node;
+			ft_lstdelone(node, del);
 			node = node->next;
 		}
 		*lst = NULL;

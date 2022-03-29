@@ -6,7 +6,7 @@
 #    By: modysseu <modysseu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/16 15:37:42 by modysseu          #+#    #+#              #
-#    Updated: 2022/03/27 20:17:14 by modysseu         ###   ########.fr        #
+#    Updated: 2022/03/29 18:33:43 by modysseu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,17 +16,20 @@ SRC		=	init_list.c\
 			list_func.c\
 			utils.c\
 			parser.c\
+			thread_func.c\
+			executoin.c\
+			execution_utils.c\
 			main.c
 
 HEADER	=	philosophers.h
 
 CC		=	cc
 
-FLAGS	=	-Werror -Wall -Wextra -g -I $(HEADER) 
+FLAGS	=	-Werror -Wall -Wextra -fsanitize=thread -g -I $(HEADER)
 #-xinstrument=datarace
 #leaks --atExit --
-#-fsanitize=address
-#-fsanitize=thread
+#-fsanitize=address -g
+#-fsanitize=thread -g
 RM		=	rm -f
 
 OBJ		= $(SRC:.c=.o)
