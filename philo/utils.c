@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: modysseu <modysseu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/08 19:26:12 by modysseu          #+#    #+#             */
-/*   Updated: 2022/03/16 15:28:29 by modysseu         ###   ########.fr       */
+/*   Created: 2022/03/27 15:42:57 by modysseu          #+#    #+#             */
+/*   Updated: 2022/03/29 17:23:10 by modysseu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,35 @@ int	ft_atoi(const char *str)
 	if (result > 2147483647 && sign == 1)
 		return (-1);
 	return (result * sign);
+}
+
+int	ft_isdigit(int c)
+{
+	if (c >= 48 && c <= 57)
+		return (1);
+	return (0);
+}
+
+long long	ft_gettime(void)
+{
+	struct timeval	tv;
+
+	gettimeofday(&tv, NULL);
+	return (tv.tv_usec / 1000 + tv.tv_sec * 1000);
+}
+
+void	ft_sleep(int time)
+{
+	long long	pause;
+
+	pause = ft_gettime() + time;
+	while (ft_gettime() < pause)
+		usleep(100);
+}
+
+int	free_error(t_philosopher *thread, t_args *args)
+{
+	ft_lstclear(&thread, free);
+	free(args);
+	return (1);
 }

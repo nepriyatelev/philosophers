@@ -6,7 +6,7 @@
 /*   By: modysseu <modysseu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 19:48:39 by modysseu          #+#    #+#             */
-/*   Updated: 2022/03/25 17:17:09 by modysseu         ###   ########.fr       */
+/*   Updated: 2022/03/29 19:16:20 by modysseu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,33 +35,8 @@ static int	validation_check(char **input)
 	return (0);
 }
 
-
-int	init_lst(t_philosopher **thread, t_args **args)
+int	parser(t_args *args, char **input)
 {
-	int				i;
-	t_philosopher	*tmp;
-
-	tmp = NULL;
-	i = 0;
-	while (i < (*args)->nop)
-	{
-		tmp = ft_lstnew(args, i + 1);
-		if (tmp == NULL)
-			return (1);
-		ft_lstadd_back(thread, tmp);
-		i++;
-	}
-	ft_lstlast(*thread)->next = *thread;
-	return (0);
-}
-
-int	parser(t_philosopher **thread, char **input)
-{
-	t_args	*args;
-
-	args = (t_args *)malloc(sizeof(t_args));
-	if (args == NULL)
-		return (1);
 	if (validation_check(input))
 		return (1);
 	args->nop = ft_atoi(input[0]);
@@ -72,7 +47,6 @@ int	parser(t_philosopher **thread, char **input)
 		args->notepme = ft_atoi(input[4]);
 	else
 		args->notepme = -1;
-	if (init_lst(thread, &args))
-		return (1);
+	args->start_time = 0;
 	return (0);
 }

@@ -1,20 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isdigit.c                                       :+:      :+:    :+:   */
+/*   init_list.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: modysseu <modysseu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/04 19:47:51 by modysseu          #+#    #+#             */
-/*   Updated: 2022/03/16 19:36:52 by modysseu         ###   ########.fr       */
+/*   Created: 2022/03/27 16:23:23 by modysseu          #+#    #+#             */
+/*   Updated: 2022/03/29 19:15:58 by modysseu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-int	ft_isdigit(int c)
+int	init_lst(t_philosopher **thread, t_args **args)
 {
-	if (c >= 48 && c <= 57)
-		return (1);
+	int				i;
+	t_philosopher	*tmp;
+
+	tmp = NULL;
+	i = 0;
+	while (i < (*args)->nop)
+	{
+		tmp = ft_lstnew(args, i + 1);
+		if (tmp == NULL)
+			return (1);
+		ft_lstadd_back(thread, tmp);
+		i++;
+	}
+	ft_lstlast(*thread)->next = *thread;
 	return (0);
 }
